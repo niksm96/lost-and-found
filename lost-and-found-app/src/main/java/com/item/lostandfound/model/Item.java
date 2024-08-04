@@ -3,7 +3,7 @@ package com.item.lostandfound.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,16 +16,18 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "itemId" , unique = true)
     private Integer itemId;
 
+    @Column(name = "itemName")
     private String itemName;
 
+    @Column(name = "quantity")
     private Integer quantity;
 
+    @Column(name = "place")
     private String place;
 
-    @ManyToMany(fetch = FetchType.EAGER, targetEntity = User.class, cascade = { CascadeType.ALL })
-    @JoinTable(name = "Users_Items", joinColumns = { @JoinColumn(name = "itemId") }, inverseJoinColumns = {
-            @JoinColumn(name = "id") })
-    private List<User> listOfUsers;
+    @Column(name = "userIds")
+    private Set<Integer> setOfUsersIds;
 }

@@ -14,11 +14,10 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "userId" , unique = true)
+    private Integer userId;
 
-    private String name;
+    @Column(name = "userName")
+    private String userName;
 
-    private String email;
-
-    private String password;
 }
