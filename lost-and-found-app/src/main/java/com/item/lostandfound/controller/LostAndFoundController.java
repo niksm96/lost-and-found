@@ -40,7 +40,7 @@ public class LostAndFoundController {
      * @return HttpStatus OK if the upload was successful, else Internal Server Error.
      */
     @PostMapping("/admin/uploadLostItems")
-    public ResponseEntity<?> uploadLostItems(@RequestBody @NonNull MultipartFile file) {
+    public ResponseEntity<?> uploadLostItems(@RequestBody MultipartFile file) {
         Map<String, String> map = new HashMap<>();
 
         map.put("fileName", file.getOriginalFilename());
@@ -79,7 +79,7 @@ public class LostAndFoundController {
      *         Also, Bad Request in case of improper input.
      */
     @PostMapping("/public/claimLostItems")
-    public ResponseEntity<?> claimLostItems(@Validated @RequestBody ClaimItemModel claimItems) {
+    public ResponseEntity<?> claimLostItems(@RequestBody ClaimItemModel claimItems) {
         if (claimItems != null && claimItems.item() != null && claimItems.userId() != null) {
             Item item = itemService.claimItem(claimItems);
             if (item != null) {
@@ -125,7 +125,7 @@ public class LostAndFoundController {
      * @return HttpStatus OK, if the user registered successfully else Internal Server Error.
      */
     @PostMapping("/public/registerUser")
-    public ResponseEntity<?> register(@Validated @RequestBody User user) {
+    public ResponseEntity<?> register(@RequestBody User user) {
         if (userService.register(user) != null) {
             return ResponseEntity.ok("User registered: " + user.getUsername());
         }
