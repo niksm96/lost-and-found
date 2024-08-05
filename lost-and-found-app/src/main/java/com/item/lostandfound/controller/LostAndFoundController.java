@@ -5,6 +5,7 @@ import com.item.lostandfound.model.Item;
 import com.item.lostandfound.model.User;
 import com.item.lostandfound.service.ItemService;
 import com.item.lostandfound.service.UserService;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class LostAndFoundController {
     private UserService userService;
 
     @PostMapping("/admin/uploadLostItems")
-    public ResponseEntity<?> uploadLostItems(@RequestBody MultipartFile file) {
+    public ResponseEntity<?> uploadLostItems(@RequestBody @NonNull MultipartFile file) {
         Map<String, String> map = new HashMap<>();
 
         map.put("fileName", file.getOriginalFilename());
@@ -75,7 +76,7 @@ public class LostAndFoundController {
 
     @GetMapping("/admin/getClaimedItems")
     public ResponseEntity<?> getClaimedItems() {
-        Map<Item, User> listOfLostItems = itemService.getClaimedItems();
+        Map<Item, String> listOfLostItems = itemService.getClaimedItems();
         if (!listOfLostItems.isEmpty()) {
             logger.info("Successfully fetched the list of claimed lost items: {}", listOfLostItems);
             return new ResponseEntity<>(listOfLostItems, HttpStatus.OK);

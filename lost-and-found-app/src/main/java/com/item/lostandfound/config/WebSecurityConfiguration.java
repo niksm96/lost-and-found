@@ -27,7 +27,7 @@ public class WebSecurityConfiguration {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("/lostAndFound/public/*").permitAll()
-                        .requestMatchers("/lostAndFound/admin/*").hasRole("ADMIN").anyRequest().authenticated()
+                        .requestMatchers("/lostAndFound/admin/*").hasRole("ROLE_ADMIN").anyRequest().authenticated()
                 ).httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Configures session management to be stateless.

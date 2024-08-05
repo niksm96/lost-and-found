@@ -84,15 +84,16 @@ public class ItemServiceImpl implements ItemService {
      * @return
      */
     @Override
-    public Map<Item, User> getClaimedItems() {
-        Map<Item, User> map = new HashMap<>();
+    public Map<Item, String> getClaimedItems() {
+        Map<Item, String> map = new HashMap<>();
         List<Item> listOfAllLostItems = itemRepository.findAll();
         listOfAllLostItems.parallelStream()
                 .filter(item -> item.getSetOfUsersIds() != null)
                 .forEach(item -> item.getSetOfUsersIds()
                         .stream().map(userId -> userRepository.findById(userId)).forEach(user -> {
                             if (user.isEmpty()) logger.error("Could not find User");
-                            map.put(item, user.get());
+                            User claimedUser = user.get();
+                            map.put(item, claimedUser.getUserId() + ":" + claimedUser.getUsername());
                         }));
         return map;
     }

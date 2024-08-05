@@ -51,6 +51,8 @@ public class FileUtils {
                 list.add(item);
                 continue;
             }
+            if(!line.contains(":"))
+                continue;
             String[] parts = line.split(":");
 
             String key = parts[0].trim();
