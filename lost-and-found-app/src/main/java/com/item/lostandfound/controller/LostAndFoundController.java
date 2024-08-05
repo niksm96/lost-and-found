@@ -45,7 +45,7 @@ public class LostAndFoundController {
             return new ResponseEntity<>("File could not be uploaded", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.info("File upload is done : {}", map);
-        return ResponseEntity.ok(map);
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
     @GetMapping("/public/lostItems")
@@ -53,10 +53,10 @@ public class LostAndFoundController {
         List<Item> listOfLostItems = itemService.getLostItems();
         if (!listOfLostItems.isEmpty()) {
             logger.info("Successfully fetched all the lost items: {}", listOfLostItems);
-            return ResponseEntity.ok(listOfLostItems);
+            return new ResponseEntity<>(listOfLostItems, HttpStatus.OK);
         }
         logger.error("Could not fetch lost items");
-        return ResponseEntity.internalServerError().body("Could not fetch lost items");
+        return new ResponseEntity<String>("Could not fetch lost items", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PostMapping("/public/claimLostItems")
@@ -65,21 +65,23 @@ public class LostAndFoundController {
             Item item = itemService.claimItem(claimItems);
             if (item != null) {
                 logger.info("Successfully claimed the lost item: {} by the user: {}", item, claimItems.userId());
-                return ResponseEntity.ok("Item claimed: " + item);
+                return new ResponseEntity<>("Item claimed: " + item, HttpStatus.OK);
             }
-            return ResponseEntity.internalServerError().body("Item couldn't be claimed");
+            return new ResponseEntity<String>("Item couldn't be claimed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.error("Improper input, 1 or more field values missing : {}", claimItems);
-        return ResponseEntity.badRequest().body("Improper input, 1 or more field values missing: " + claimItems);
+        return new ResponseEntity<String>("Improper input, 1 or more field values missing : " +  claimItems, HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/admin/getClaimedItems")
     public ResponseEntity<?> getClaimedItems() {
         Map<Item, User> listOfLostItems = itemService.getClaimedItems();
         if (!listOfLostItems.isEmpty()) {
-            return ResponseEntity.ok(listOfLostItems);
+            logger.info("Successfully fetched the list of claimed lost items: {}", listOfLostItems);
+            return new ResponseEntity<>(listOfLostItems, HttpStatus.OK);
         }
-        return ResponseEntity.internalServerError().body("Could not claimed lost items");
+        logger.info("Could not find any claimed lost items");
+        return new ResponseEntity<String>("Could not find any claimed lost items", HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/public/users")
