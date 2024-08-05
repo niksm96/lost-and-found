@@ -19,6 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This is a Rest Controller class of the Lost And Found App containing various rest calls both for admin and user.
+ */
 @RestController
 @RequestMapping("/lostAndFound")
 public class LostAndFoundController {
@@ -31,6 +34,11 @@ public class LostAndFoundController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Rest API to upload file containing lost items and store them in DB. Only accessible by admin
+     * @param file Takes in a multipart file in text format containing list of lost items.
+     * @return HttpStatus OK if the upload was successful, else Internal Server Error.
+     */
     @PostMapping("/admin/uploadLostItems")
     public ResponseEntity<?> uploadLostItems(@RequestBody @NonNull MultipartFile file) {
         Map<String, String> map = new HashMap<>();
@@ -49,6 +57,10 @@ public class LostAndFoundController {
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
+    /**
+     * Rest API to fetch all the lost items.
+     * @return list of lost items
+     */
     @GetMapping("/public/lostItems")
     public ResponseEntity<?> getLostItems() {
         List<Item> listOfLostItems = itemService.getLostItems();
@@ -60,6 +72,12 @@ public class LostAndFoundController {
         return new ResponseEntity<String>("Could not fetch lost items", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * Rest API to claim the lost items by a user.
+     * @param claimItems Item that can be claimed
+     * @return HttpStatus OK if the claiming of the item was successful else Internal Server Error.
+     *         Also, Bad Request in case of improper input.
+     */
     @PostMapping("/public/claimLostItems")
     public ResponseEntity<?> claimLostItems(@Validated @RequestBody ClaimItemModel claimItems) {
         if (claimItems != null && claimItems.item() != null && claimItems.userId() != null) {
@@ -74,6 +92,10 @@ public class LostAndFoundController {
         return new ResponseEntity<String>("Improper input, 1 or more field values missing : " +  claimItems, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Rest API to list the claimed items. Only accessible by admin.
+     * @return HttpStatus OK, displayed with list of claimed items along with User associated with it else Internal Server Error.
+     */
     @GetMapping("/admin/getClaimedItems")
     public ResponseEntity<?> getClaimedItems() {
         Map<Item, String> listOfLostItems = itemService.getClaimedItems();
@@ -85,6 +107,10 @@ public class LostAndFoundController {
         return new ResponseEntity<String>("Could not find any claimed lost items", HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Rest API to list all the users.
+     * @return HttpStatus OK, displayed with list of users else Internal Server Error.
+     */
     @GetMapping("/public/users")
     public ResponseEntity<?> getAllUsers() {
         List<User> users = userService.getUsers();
@@ -93,6 +119,11 @@ public class LostAndFoundController {
         return new ResponseEntity<String>("Users couldn't be fetched", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * Rest API to register a user.
+     * @param user
+     * @return HttpStatus OK, if the user registered successfully else Internal Server Error.
+     */
     @PostMapping("/public/registerUser")
     public ResponseEntity<?> register(@Validated @RequestBody User user) {
         if (userService.register(user) != null) {

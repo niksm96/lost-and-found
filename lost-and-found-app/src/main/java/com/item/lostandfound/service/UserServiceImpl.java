@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * UserServiceImpl is an implementation class of UserService interface, containing all the "how"(business logic) part.
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -22,7 +25,8 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     /**
-     * @return
+     * Invokes the finaAll of UserRepository to fetch all the users.
+     * @return list of users.
      */
     @Override
     public List<User> getUsers() {
@@ -30,8 +34,9 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * @param user
-     * @return
+     * Encrypts the password of the user who is registering and saves the user to the DB.
+     * @param user to be registered
+     * @return User who has been registered.
      */
     @Override
     public User register(User user) {

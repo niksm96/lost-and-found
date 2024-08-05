@@ -12,10 +12,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Utility class that performs operations on or with files.
+ */
 public class FileUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
+    /**
+     * Converts multipart file to a readable file.
+     * @param multipartFile
+     * @return file
+     * @throws IOException
+     */
     public static File convertMultipartFileToFile(MultipartFile multipartFile) throws IOException {
         File file = null;
         file = File.createTempFile("inputFileTmp", ".txt");
@@ -23,6 +32,13 @@ public class FileUtils {
         return file;
     }
 
+    /**
+     * Parses the file and extracts the list of lost items onto a List of Item object.
+     * @param file
+     * @return list of items
+     * @throws InvalidFileException
+     * @throws IOException
+     */
     public static List<Item> listOfItemsFromFile(File file) throws InvalidFileException, IOException {
         Map<String, String> map = new HashMap<String, String>();
         List<Item> list = new ArrayList<Item>();

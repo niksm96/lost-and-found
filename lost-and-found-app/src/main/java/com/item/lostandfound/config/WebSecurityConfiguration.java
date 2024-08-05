@@ -13,6 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Web Configuration containing security related beans.
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfiguration {
@@ -20,6 +23,12 @@ public class WebSecurityConfiguration {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    /**
+     * Security Filter Chain to secure the endpoints.
+     * @param http
+     * @return Builds and returns the SecurityFilterChain.
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -30,10 +39,14 @@ public class WebSecurityConfiguration {
                         .requestMatchers("/lostAndFound/admin/*").hasRole("ROLE_ADMIN").anyRequest().authenticated()
                 ).httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Configures session management to be stateless.
-        return http.build(); // Builds and returns the SecurityFilterChain.
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        return http.build();
     }
 
+    /**
+     * Password encoder when a user registers.
+     * @return instance of BCryptPasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

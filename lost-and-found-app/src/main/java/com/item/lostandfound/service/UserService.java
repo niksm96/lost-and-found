@@ -6,6 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+/**
+ * UserService is an interface with definition of the methods.
+ */
 public interface UserService {
 
     public List<User> getUsers();

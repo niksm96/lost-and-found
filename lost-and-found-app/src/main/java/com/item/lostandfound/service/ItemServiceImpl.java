@@ -18,6 +18,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * ItemServiceImpl is an implementation class of ItemService interface, containing all the "how"(business logic) part.
+ */
 @Service
 public class ItemServiceImpl implements ItemService {
 
@@ -30,8 +33,11 @@ public class ItemServiceImpl implements ItemService {
     private UserRepository userRepository;
 
     /**
-     * @param multipartFile
-     * @return
+     * Converts the multipart file to a readable File, fetches the list of lost items from the file and stores
+     * the data in the database.
+     *
+     * @param multipartFile input from the rest API call.
+     * @return boolean value, whether the list of lost items are saved to DB or not
      */
     @Override
     public boolean saveLostItems(MultipartFile multipartFile) {
@@ -53,7 +59,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * @return
+     * Invokes the findAll from ItemRepository to list all the lost items.
+     * @return list of lost items.
      */
     @Override
     public List<Item> getLostItems() {
@@ -62,8 +69,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
+     * Finds the items selected to be claimed, and updates the item with the user details.
      * @param claimItem
-     * @return Saved Item
+     * @return Saved Item with user details.
      */
     @Override
     public Item claimItem(ClaimItemModel claimItem) {
@@ -81,7 +89,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * @return
+     * Fetches all the lost items and filters to find the ones that have been claimed.
+     * @return Map containing items and user who claimed it.
      */
     @Override
     public Map<Item, String> getClaimedItems() {

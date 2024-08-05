@@ -7,6 +7,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * ItemService is an interface with definition of the methods.
+ */
 public interface ItemService {
 
     public boolean saveLostItems(MultipartFile file);

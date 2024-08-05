@@ -2,12 +2,10 @@ package com.item.lostandfound.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-
+/**
+ * User is persistent java object class.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

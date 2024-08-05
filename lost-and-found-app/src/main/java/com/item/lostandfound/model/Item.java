@@ -5,6 +5,9 @@ import lombok.*;
 
 import java.util.Set;
 
+/**
+ * Item is persistent java object class.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
