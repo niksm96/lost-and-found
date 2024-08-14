@@ -2,6 +2,7 @@ package com.item.lostandfound.service;
 
 import com.item.lostandfound.dao.ItemRepository;
 import com.item.lostandfound.dao.UserRepository;
+import com.item.lostandfound.exceptions.NoFileUploadedException;
 import com.item.lostandfound.model.ClaimItemModel;
 import com.item.lostandfound.model.Item;
 import com.item.lostandfound.model.User;
@@ -38,7 +39,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void saveLostItems() {
+    void saveLostItems() throws NoFileUploadedException {
         MockMultipartFile file
                 = new MockMultipartFile(
                 "file",

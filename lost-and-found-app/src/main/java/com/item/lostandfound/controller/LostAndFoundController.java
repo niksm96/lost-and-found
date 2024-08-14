@@ -1,11 +1,11 @@
 package com.item.lostandfound.controller;
 
+import com.item.lostandfound.exceptions.NoFileUploadedException;
 import com.item.lostandfound.model.ClaimItemModel;
 import com.item.lostandfound.model.Item;
 import com.item.lostandfound.model.User;
 import com.item.lostandfound.service.ItemService;
 import com.item.lostandfound.service.UserService;
-import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,21 +39,10 @@ public class LostAndFoundController {
      * @return HttpStatus OK if the upload was successful, else Internal Server Error.
      */
     @PostMapping("/admin/uploadLostItems")
-    public ResponseEntity<?> uploadLostItems(@RequestBody MultipartFile file) {
-        Map<String, String> map = new HashMap<>();
-
-        map.put("fileName", file.getOriginalFilename());
-        map.put("fileSize", String.valueOf(file.getSize()));
-        map.put("fileContentType", file.getContentType());
-        map.put("message", "File upload done");
-
-        boolean isItemsSaved = itemService.saveLostItems(file);
-        if (!isItemsSaved) {
-            logger.error("File {} could not be upload", file);
-            return new ResponseEntity<>("File could not be uploaded", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        logger.info("File upload is done : {}", map);
-        return new ResponseEntity<>(map, HttpStatus.OK);
+    public ResponseEntity<?> uploadLostItems(@RequestBody MultipartFile file) throws NoFileUploadedException {
+        itemService.saveLostItems(file);
+        logger.info("File upload is done");
+        return new ResponseEntity<>("File Successfully Uploaded", HttpStatus.OK);
     }
 
     /**
@@ -69,7 +57,7 @@ public class LostAndFoundController {
             return new ResponseEntity<>(listOfLostItems, HttpStatus.OK);
         }
         logger.error("Could not fetch lost items");
-        return new ResponseEntity<String>("Could not fetch lost items", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<String>("No lost items found", HttpStatus.NOT_FOUND);
     }
 
     /**

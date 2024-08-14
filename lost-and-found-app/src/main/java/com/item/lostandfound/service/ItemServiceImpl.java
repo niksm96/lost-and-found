@@ -4,6 +4,7 @@ import com.item.lostandfound.dao.ItemRepository;
 import com.item.lostandfound.dao.UserRepository;
 import com.item.lostandfound.exceptions.InvalidFileException;
 import com.item.lostandfound.exceptions.LostAndFoundException;
+import com.item.lostandfound.exceptions.NoFileUploadedException;
 import com.item.lostandfound.model.ClaimItemModel;
 import com.item.lostandfound.model.Item;
 import com.item.lostandfound.model.User;
@@ -11,6 +12,8 @@ import com.item.lostandfound.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,25 +40,26 @@ public class ItemServiceImpl implements ItemService {
      * the data in the database.
      *
      * @param multipartFile input from the rest API call.
-     * @return boolean value, whether the list of lost items are saved to DB or not
+     *
      */
     @Override
-    public boolean saveLostItems(MultipartFile multipartFile) {
+    public void saveLostItems(MultipartFile multipartFile) throws NoFileUploadedException {
+        FileUtils.validateFile(multipartFile);
         File file = null;
+        List<Item> listOfItems;
         try {
             file = FileUtils.convertMultipartFileToFile(multipartFile);
-        } catch (IOException e) {
-            logger.error("Either failed to create a temp file or failed to transfer the contents of multipart file onto the temp file", e);
-            throw new LostAndFoundException("Failed to convert multipart file to temp File", e);
-        }
-        List<Item> listOfItems = null;
-        try {
             listOfItems = FileUtils.listOfItemsFromFile(file);
-        } catch (InvalidFileException | IOException e) {
+        } catch (IOException e) {
             logger.error("Failed to process the input file", e);
             throw new LostAndFoundException("Failed to process the input file", e);
         }
-        return !itemRepository.saveAll(listOfItems).isEmpty();
+        if(!listOfItems.isEmpty()){
+            logger.info("Items saved into the repository : {}", listOfItems);
+            itemRepository.saveAll(listOfItems);
+        }else{
+            logger.info("No items found to save into the repository");
+        }
     }
 
     /**

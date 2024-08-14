@@ -1,5 +1,6 @@
 package com.item.lostandfound.service;
 
+import com.item.lostandfound.exceptions.NoFileUploadedException;
 import com.item.lostandfound.model.ClaimItemModel;
 import com.item.lostandfound.model.Item;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,7 +13,7 @@ import java.util.Map;
  */
 public interface ItemService {
 
-    public boolean saveLostItems(MultipartFile file);
+    public void saveLostItems(MultipartFile file) throws NoFileUploadedException;
 
     public List<Item> getLostItems();
 

@@ -1,6 +1,7 @@
 package com.item.lostandfound.util;
 
 import com.item.lostandfound.exceptions.InvalidFileException;
+import com.item.lostandfound.exceptions.NoFileUploadedException;
 import com.item.lostandfound.model.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,14 @@ public class FileUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
+
+    public static void validateFile(MultipartFile multipartFile) throws NoFileUploadedException {
+        if(multipartFile == null){
+            throw new NoFileUploadedException("No file detected for upload. Please upload file");
+        } else if (multipartFile.isEmpty()) {
+            throw new InvalidFileException("File is empty. Please upload file with proper contents");
+        }
+    }
     /**
      * Converts multipart file to a readable file.
      * @param multipartFile
@@ -47,7 +56,7 @@ public class FileUtils {
         try {
             br = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
-            logger.error("File could not be found", e);
+            logger.error("Temporary file could not be found, file: {}", file.getPath(), e);
             throw new InvalidFileException(e.getMessage());
         }
         String line = null;

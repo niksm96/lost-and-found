@@ -80,7 +80,7 @@ class LostAndFoundControllerTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "Hello, World!".getBytes()
         );
-        Mockito.when(this.itemService.saveLostItems(file)).thenReturn(true);
+        //Mockito.doNothing().when(itemService.saveLostItems(file));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/lostAndFound/admin/uploadLostItems")
                 .content(file.getBytes())
